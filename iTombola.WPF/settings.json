@@ -1,0 +1,9 @@
+{
+  "AudioConverter:SpeechKey": "",
+  "AudioConverter:SpeechRegion": "",
+  "AudioConverter:AudioFilePath": "tempfiles",
+  "AudioConverter:VoiceName": "it-IT-CalimeroNeural", // For info about voice name look at https://learn.microsoft.com/en-us/azure/cognitive-services/speech-service/language-support?tabs=stt-tts#text-to-speech
+  "ImageAnalyzer:SubscriptionKey": "",
+  "ImageAnalyzer:Endpoint": "",
+  "ImageAnalyzer:SaveFileEnabled": false
+}
