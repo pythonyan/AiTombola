@@ -1,16 +1,15 @@
-﻿using iTombola.Cognitive.Configurations;
+﻿using Azure.AI.Vision.ImageAnalysis;
+using Azure;
+using iTombola.Cognitive.Configurations;
 using iTombola.Core.Implementations;
 using iTombola.Core.Interfaces;
 using iTombola.Core.Models;
-using Microsoft.Azure.CognitiveServices.Vision.ComputerVision;
-using Microsoft.Azure.CognitiveServices.Vision.ComputerVision.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using static System.Net.WebRequestMethods;
 
 namespace iTombola.Cognitive.Services
 {
-	public class ImageAnalyzer : IImageAnalyzer
+    public class ImageAnalyzer : IImageAnalyzer
 	{
 		private readonly ILogger logger;
 		private readonly ImagenAnalyzerConfiguration config;
@@ -23,69 +22,62 @@ namespace iTombola.Cognitive.Services
 			config = ImagenAnalyzerConfiguration.Load(configuration);
 			logger = loggerFactory.CreateLogger<TombolaService>();
 		}
-		public ComputerVisionClient Authenticate(string endpoint, string key)
-		{
-			ComputerVisionClient client =
-			  new ComputerVisionClient(new ApiKeyServiceClientCredentials(key))
-			  { Endpoint = endpoint };
-			return client;
-		}
 
-		public async Task<ImageAnalyzerResponse> ExtractNumbersImageFromStream(Stream imageData, CancellationToken token)
-		{
-			var resultService = new ImageAnalyzerResponse()
-			{
-				Numbers = new List<ExtractedNumberInfo>()
-			};
+        public ImageAnalysisClient Authenticate(string endpoint, string key)
+        {
+            var credentials = new AzureKeyCredential(key);
+            return new ImageAnalysisClient(new Uri(endpoint), credentials);
+        }
 
-			ComputerVisionClient client = Authenticate(config.Endpoint, config.SubscriptionKey);
-            ReadOperationResult results;
+        public async Task<ImageAnalyzerResponse> ExtractNumbersImageFromStream(Stream imageData, CancellationToken token)
+        {
+            var resultService = new ImageAnalyzerResponse()
+            {
+                Numbers = new List<ExtractedNumberInfo>()
+            };
 
-            ReadInStreamHeaders? textHeaders = await client.ReadInStreamAsync(imageData);
-            var operationId = textHeaders.GetOperationId();
+            var client = Authenticate(config.Endpoint, config.SubscriptionKey);
 
-			do
-			{
-				await Task.Delay(125);
-				results = await client.GetReadResultAsync(Guid.Parse(operationId), cancellationToken: token);
-			}
-			while (results.Status == OperationStatusCodes.Running ||
-				results.Status == OperationStatusCodes.NotStarted);
+            var results = await client.AnalyzeAsync(BinaryData.FromStream(imageData),
+                    VisualFeatures.Read, cancellationToken: token);
 
-			if (results.Status == OperationStatusCodes.Succeeded)
-			{
-				foreach (ReadResult page in results.AnalyzeResult.ReadResults)
-				{
-					foreach (Line line in page.Lines)
-					{
-						resultService.Numbers.AddRange(ExtractNumbersFromLine(line));
-					}
-				}
-			}
-			return resultService;
-		}
+            if (!results.GetRawResponse().IsError && results.Value != null && results.Value.Read != null)
+            {
+                foreach (var block in results.Value.Read.Blocks)
+                {
+                    foreach (var line in block.Lines)
+                    {
+                        resultService.Numbers.AddRange(ExtractNumbersFromLine(line));
+                    }
+                }
+            }
 
+            return resultService;
+        }
 
-		private List<ExtractedNumberInfo> ExtractNumbersFromLine(Line line)
-		{
-			var numbers = new List<ExtractedNumberInfo>();
-			foreach (var word in line.Words)
-			{
-				if (word != null && !string.IsNullOrWhiteSpace(word.Text))
-				{
-					if (int.TryParse(word.Text, out var intNumber) && (intNumber > 0 && intNumber <= 90))
-					{
-						numbers.Add(new ExtractedNumberInfo()
-						{
-							Confidence = word.Confidence,
-							Number = word.Text
-						});
-					}
-				}
-			}
-			return numbers;
-		}
-	}
+        private List<ExtractedNumberInfo> ExtractNumbersFromLine(DetectedTextLine line)
+        {
+            var numbers = new List<ExtractedNumberInfo>();
+            if (line != null)
+            {
+                foreach (var word in line.Words)
+                {
+                    if (word != null && !string.IsNullOrWhiteSpace(word.Text))
+                    {
+                        if (int.TryParse(word.Text, out var intNumber) && (intNumber > 0 && intNumber <= 90))
+                        {
+                            numbers.Add(new ExtractedNumberInfo()
+                            {
+                                Confidence = word.Confidence,
+                                Number = word.Text
+                            });
+                        }
+                    }
+                }
+            }
+            return numbers;
+        }
+    }
 
 
 
