@@ -9,10 +9,9 @@ namespace iTombola.Core.Interfaces
 {
 	public interface IAudioConverter
 	{
-		Task<AudioConverterResponse> ConvertDescriptionToAudio(NumberDescriptionInfo description, 
-			CancellationToken token = default);
+		Task<AudioConverterResponse> ConvertDescriptionToAudio(NumberDescriptionInfo description, string voiceName, CancellationToken token = default);
 
 		Task<AudioConverterResponse> ConvertTextToAudio(string text, 
-			string culture, CancellationToken token = default);
+			string culture, string voiceName, CancellationToken token = default);
 	}
 }

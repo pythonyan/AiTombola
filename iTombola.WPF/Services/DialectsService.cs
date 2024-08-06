@@ -55,7 +55,10 @@ namespace iTombola.Services
 						case "culture":
 							dialect.Culture = fields[1];
 							break;
-						default:
+                        case "voicename":
+                            dialect.VoiceName = fields[1];
+                            break;
+                        default:
 							break;
 					}
 				}

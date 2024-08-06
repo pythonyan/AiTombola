@@ -41,6 +41,9 @@
 	  </Compile>
 	</ItemGroup>
 	<ItemGroup>
+	  <None Update="Descriptions\en-gb.csv">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
 	  <None Update="Descriptions\it-it-na.csv">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>

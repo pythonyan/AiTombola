@@ -19,7 +19,7 @@ namespace iTombola.Core.Interfaces
 	/// <param name="maximumResultNumber">Maximum number of result returned. Default value is 1</param>
 	public interface ITombolaService
 	{
-		Task<ExtractedNumbersResponse> ExtractNumberFromStream(Stream imageData, string culture, string dialect,
+		Task<ExtractedNumbersResponse> ExtractNumberFromStream(Stream imageData, string culture, string dialect,string voiceName,
 			double expectedConfidence,int maximumResultNumber=1, CancellationToken token=default);
 	}
 }

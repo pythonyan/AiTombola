@@ -13,7 +13,9 @@ namespace iTombola.Core.Models
 		public string? Culture { get; set; }
 		public string? Dialect { get; set; }
 
-		public bool IsValid() 
+		public string? VoiceName { get; set; }
+
+        public bool IsValid() 
 		{
 			return !string.IsNullOrWhiteSpace(Content);
 		}

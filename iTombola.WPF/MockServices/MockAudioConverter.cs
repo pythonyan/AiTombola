@@ -13,7 +13,7 @@ namespace iTombola.MockServices
 {
 	internal class MockAudioConverter : IAudioConverter
 	{
-		public Task<AudioConverterResponse> ConvertDescriptionToAudio(NumberDescriptionInfo description, CancellationToken token = default)
+		public Task<AudioConverterResponse> ConvertDescriptionToAudio(NumberDescriptionInfo description, string voiceName, CancellationToken token = default)
 		{
 			var result = new AudioConverterResponse
 			{
@@ -25,7 +25,7 @@ namespace iTombola.MockServices
 			return Task.FromResult(result);
 		}
 
-		public Task<AudioConverterResponse> ConvertTextToAudio(string text, string culture, CancellationToken token)
+		public Task<AudioConverterResponse> ConvertTextToAudio(string text, string culture,string voiceName, CancellationToken token)
 		{
 			var result = new AudioConverterResponse
 			{

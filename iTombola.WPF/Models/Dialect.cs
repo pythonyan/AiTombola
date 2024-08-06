@@ -11,5 +11,7 @@ namespace iTombola.Models
         public string DisplayName { get; set; }
         public string Culture { get; set; }
         public string DialectName { get; set; }
+
+        public string VoiceName { get; set; }
     }
 }
