@@ -98,7 +98,7 @@ namespace iTombola
         {
             var dialect = (Dialect)cmbLanguage.SelectedItem;
 
-            txtStatus.Text = "Analisi immagine in corso";
+            txtStatus.Text = "Image analysis running!";
             using var memStream = new MemoryStream();
             BitmapEncoder encoder = new PngBitmapEncoder();
             encoder.Frames.Add(BitmapFrame.Create((BitmapSource)FrameImage.Source));
@@ -113,7 +113,7 @@ namespace iTombola
             {
 
                 var number = result.Numbers.First();
-                txtStatus.Text = $"Ultimo numero riconosciuto: {number.Number}";
+                txtStatus.Text = $"Last number: {number.Number}";
                 try
                 {
                     PlayWavFile(number.NumberAudioFilePath);
@@ -126,7 +126,7 @@ namespace iTombola
             }
             else
             {
-                txtStatus.Text = $"Nessun numero riconosciuto!";
+                txtStatus.Text = $"No number in the image!";
             }
         }
 

@@ -11,7 +11,7 @@
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
             <ComboBox x:Name="cmbLanguage" Margin="0,20,20,20" FontSize="16" VerticalAlignment="Center" DisplayMemberPath="DisplayName">
             </ComboBox>
-            <Button x:Name="btnScatta" Content="Scatta!" HorizontalAlignment="Center" Margin="20,20,0,20 " Height="37" VerticalAlignment="Center" Width="208" Click="btnScatta_Click" BorderBrush="#FFAF2525" Foreground="#FFE23131" FontWeight="Bold" FontSize="16" IsEnabled="True" IsDefault="True"/>
+            <Button x:Name="btnScatta" Content="Take photo!" HorizontalAlignment="Center" Margin="20,20,0,20 " Height="37" VerticalAlignment="Center" Width="208" Click="btnScatta_Click" BorderBrush="#FFAF2525" Foreground="#FFE23131" FontWeight="Bold" FontSize="16" IsEnabled="True" IsDefault="True"/>
         </StackPanel>
         <TextBlock x:Name="txtStatus" HorizontalAlignment="Center" FontSize="26" Margin="0,20,0,0" FontStyle="Italic"><Run Text="Status Textbox"/></TextBlock>
     </StackPanel>
